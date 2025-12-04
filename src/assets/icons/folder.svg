@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="folderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE082"/>
+      <stop offset="100%" style="stop-color:#FFC107"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#folderGrad)" d="M4 8v32c0 2.2 1.8 4 4 4h32c2.2 0 4-1.8 4-4V14c0-2.2-1.8-4-4-4H24l-4-4H8C5.8 6 4 7.8 4 10v-2z"/>
+  <path fill="#FFD54F" d="M4 14h40v26c0 2.2-1.8 4-4 4H8c-2.2 0-4-1.8-4-4V14z"/>
+</svg>
