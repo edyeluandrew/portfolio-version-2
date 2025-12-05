@@ -111,9 +111,11 @@ const Desktop = () => {
     <div 
       className="w-screen h-screen bg-cover bg-center relative overflow-hidden select-none"
       style={{ 
-        backgroundImage: `url('https://images.unsplash.com/photo-1676299081847-824916de030a?q=80&w=2560')`,
+        backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('/profile.jpg')`,
+        backgroundColor: '#0c0c0c',
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'no-repeat',
       }}
       onClick={handleDesktopClick}
     >

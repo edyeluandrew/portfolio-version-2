@@ -9,8 +9,7 @@ import {
   UserCheck,
   MapPin,
   GraduationCap,
-  Rocket,
-  Monitor
+  Rocket
 } from 'lucide-react';
 
 const AboutContent = () => {
@@ -18,8 +17,16 @@ const AboutContent = () => {
     <div className="max-w-3xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-6 mb-8">
-        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#0078d4] to-[#00bcf2] flex items-center justify-center shadow-lg">
-          <Monitor className="w-16 h-16 text-white" />
+        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#0078d4] to-[#00bcf2] p-1 shadow-lg">
+          <img 
+            src="/profile.jpg" 
+            alt="Edyelu Andrew" 
+            className="w-full h-full rounded-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.parentElement.innerHTML = '<div class="w-full h-full rounded-full bg-gradient-to-br from-[#0078d4] to-[#00bcf2] flex items-center justify-center text-4xl">👨‍💻</div>';
+            }}
+          />
         </div>
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">Edyelu Andrew</h1>

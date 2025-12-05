@@ -155,8 +155,17 @@ const StartMenu = ({ isOpen, onClose, onOpenApp, apps }) => {
       {/* Footer */}
       <div className="flex justify-between items-center px-6 py-3 bg-black/20 border-t border-white/[0.06]">
         <div className="flex items-center gap-3 px-2 py-1.5 rounded cursor-pointer hover:bg-white/[0.05] transition-colors">
-          <div className="w-8 h-8 bg-gradient-to-br from-[#0078d4] to-[#00bcf2] rounded-full flex items-center justify-center text-sm">
-            👨‍💻
+          <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-[#0078d4] to-[#00bcf2]">
+            <img 
+              src="/profile.jpg" 
+              alt="Edyelu Andrew" 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.parentElement.innerHTML = '👨‍💻';
+                e.target.parentElement.classList.add('flex', 'items-center', 'justify-center', 'text-sm');
+              }}
+            />
           </div>
           <span className="text-white text-[13px]">Edyelu Andrew</span>
         </div>

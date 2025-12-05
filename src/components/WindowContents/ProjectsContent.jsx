@@ -83,18 +83,15 @@ const ProjectsContent = () => {
             <div className="flex">
               {/* Project Image/Icon Section */}
               <div className="w-48 h-48 bg-gradient-to-br from-[#0078d4]/20 to-[#00bcf2]/20 flex items-center justify-center flex-shrink-0 relative overflow-hidden">
-                {project.image && project.image !== '#' ? (
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
-                    }}
-                  />
-                ) : null}
-                <div className={`absolute inset-0 flex items-center justify-center ${project.image ? 'hidden' : ''}`}>
+                <img 
+                  src={project.image} 
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
                   {project.icon}
                 </div>
                 {/* Status Badge */}

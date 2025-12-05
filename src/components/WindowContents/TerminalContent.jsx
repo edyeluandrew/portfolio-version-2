@@ -23,47 +23,56 @@ const TerminalContent = () => {
   echo      - Echo a message`,
     
     about: () => `
-👨‍💻 Your Name
+👨‍💻 Edyelu Andrew
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Full Stack Developer passionate about building
-modern web applications and solving complex problems.
+Full Stack Developer & Web3 Engineer passionate about
+building modern web applications and blockchain solutions.
 
-📍 Location: Your City, Country
-💼 Experience: 3+ years
-🎓 Education: Computer Science Degree`,
+📍 Location: Uganda
+💼 Focus: Full Stack Development, Web3, Smart Contracts
+🎓 Education: Computer Science Student
+
+I thrive on problem-solving and transforming complex
+challenges into elegant, efficient solutions.`,
     
     skills: () => `
 Technical Skills:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Frontend:  React, JavaScript, TypeScript, HTML/CSS, Tailwind
-Backend:   Node.js, Python, Express, PostgreSQL, MongoDB
-Tools:     Git, Docker, AWS, Linux, Figma`,
+Frontend:  React, JavaScript, TypeScript, HTML/CSS, Tailwind, Next.js
+Backend:   Node.js, Python, Rust, Axum, Cairo, Express.js, PostgreSQL, MongoDB
+Web3:      Smart Contracts, dApps, Blockchain Development
+Tools:     Git, Docker, AWS, CDN, Linux, Figma, Agile/Scrum`,
     
     projects: () => `
 Featured Projects:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. 🛒 E-Commerce Platform - React, Node.js, MongoDB
-2. 📋 Task Management App - React, Firebase
-3. 🌤️ Weather Dashboard - React, OpenWeather API
-4. 💼 Portfolio Website - React, Tailwind CSS
+1. 🎓 Clevers Origin School System - React, Node.js, PostgreSQL
+   └─ Comprehensive school management web system (In Production)
 
-Run 'open projects' window for more details.`,
+2. 🔬 Beta Tech Labs - React, Tailwind CSS, Vite
+   └─ Marketing website for research & innovation hub (Live)
+
+3. 🍽️ Numba Restaurant System - React, Node.js, PostgreSQL
+   └─ Full-featured restaurant management system (In Production)
+
+Type 'open projects' or click the Projects icon for more details.`,
     
     contact: () => `
 Contact Information:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📧 Email:    your.email@example.com
-💼 LinkedIn: linkedin.com/in/yourprofile
-🐙 GitHub:   github.com/yourusername`,
+📧 Email:    edyeluandrew1@gmail.com
+📱 Phone:    +256 764 331 334
+💼 LinkedIn: linkedin.com/in/edyelu-andrew-118992330
+🐙 GitHub:   github.com/edyeluandrew`,
     
     social: () => `
 Social Links:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🐙 GitHub:   https://github.com/yourusername
-💼 LinkedIn: https://linkedin.com/in/yourprofile
-🐦 Twitter:  https://twitter.com/yourhandle`,
+🐙 GitHub:   https://github.com/edyeluandrew
+💼 LinkedIn: https://linkedin.com/in/edyelu-andrew-118992330
+🐦 X:        https://x.com/edyeluandrew1`,
     
-    whoami: () => 'visitor@portfolio',
+    whoami: () => 'visitor@edyelu-portfolio',
     
     date: () => new Date().toString(),
     
@@ -72,7 +81,7 @@ Social Links:
       return null;
     },
     
-    echo: (args) => args.join(' ') || '',
+    echo: (args) => args.length > 0 ? args.join(' ') : '(empty)',
   };
 
   const handleSubmit = (e) => {
@@ -82,6 +91,13 @@ Social Links:
     const parts = input.trim().split(' ');
     const cmd = parts[0].toLowerCase();
     const args = parts.slice(1);
+
+    // Handle clear command separately
+    if (cmd === 'clear') {
+      setHistory([]);
+      setInput('');
+      return;
+    }
 
     const newHistory = [...history, { type: 'input', content: `$ ${input}` }];
 
