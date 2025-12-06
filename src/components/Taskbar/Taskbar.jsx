@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import windowsIcon from '../../assets/icons/windows.svg';
 
-const Taskbar = ({ windows, activeWindowId, onWindowClick, onStartClick, startMenuOpen }) => {
+const Taskbar = ({ windows, activeWindowId, onWindowClick, onStartClick, startMenuOpen, onNotificationClick, notificationCenterOpen }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -72,7 +72,11 @@ const Taskbar = ({ windows, activeWindowId, onWindowClick, onStartClick, startMe
             onClick={() => onWindowClick(window.id)}
             title={window.title}
           >
-            <img src={window.icon} alt={window.title} className="w-6 h-6" />
+            {window.isEmoji ? (
+              <span className="text-2xl">{window.icon}</span>
+            ) : (
+              <img src={window.icon} alt={window.title} className="w-6 h-6" />
+            )}
             <div 
               className={`absolute bottom-1 h-[3px] rounded-full transition-all duration-200 ${
                 activeWindowId === window.id && !window.minimized 
@@ -106,10 +110,23 @@ const Taskbar = ({ windows, activeWindowId, onWindowClick, onStartClick, startMe
           </svg>
         </div>
 
-        <div className="flex flex-col items-end px-3 cursor-pointer h-9 justify-center rounded hover:bg-white/[0.06] transition-colors">
+        <div className="flex flex-col items-end px-3 cursor-pointer h-9 justify-center rounded hover:bg-white/[0.06] transition-colors" onClick={onNotificationClick}>
           <span className="text-white/90 text-xs leading-tight">{formatTime(time)}</span>
           <span className="text-white/60 text-[11px] leading-tight">{formatDate(time)}</span>
         </div>
+
+        {/* Notification bell */}
+        <button 
+          className={`w-9 h-9 border-none bg-transparent rounded cursor-pointer flex items-center justify-center text-white/80 hover:bg-white/[0.06] transition-colors relative ${notificationCenterOpen ? 'bg-white/10' : ''}`}
+          onClick={onNotificationClick}
+          title="Notifications"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+          </svg>
+          {/* Notification dot */}
+          <span className="absolute top-2 right-2 w-2 h-2 bg-[#0078d4] rounded-full"></span>
+        </button>
 
         <button className="w-1 h-9 border-none bg-transparent cursor-pointer hover:bg-[#60cdff]/50 transition-colors ml-1" title="Show desktop" />
       </div>

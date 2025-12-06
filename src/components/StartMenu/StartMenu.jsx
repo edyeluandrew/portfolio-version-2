@@ -1,13 +1,21 @@
 import { useState } from 'react';
 
-const StartMenu = ({ isOpen, onClose, onOpenApp, apps }) => {
+const StartMenu = ({ isOpen, onClose, onOpenApp, apps, onPowerAction }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showPowerMenu, setShowPowerMenu] = useState(false);
 
   if (!isOpen) return null;
 
   const filteredApps = apps.filter(app =>
     app.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handlePowerAction = (action) => {
+    setShowPowerMenu(false);
+    if (onPowerAction) {
+      onPowerAction(action);
+    }
+  };
 
   return (
     <div 
@@ -169,11 +177,51 @@ const StartMenu = ({ isOpen, onClose, onOpenApp, apps }) => {
           </div>
           <span className="text-white text-[13px]">Edyelu Andrew</span>
         </div>
-        <button className="w-9 h-9 bg-transparent border-none rounded text-white/70 cursor-pointer flex items-center justify-center hover:bg-white/[0.05] transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
-          </svg>
-        </button>
+        
+        {/* Power Button with Menu */}
+        <div className="relative">
+          <button 
+            className="w-9 h-9 bg-transparent border-none rounded text-white/70 cursor-pointer flex items-center justify-center hover:bg-white/[0.05] transition-colors"
+            onClick={() => setShowPowerMenu(!showPowerMenu)}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
+            </svg>
+          </button>
+          
+          {/* Power Menu Dropdown */}
+          {showPowerMenu && (
+            <div className="absolute bottom-full right-0 mb-2 w-48 bg-[rgba(44,44,44,0.95)] backdrop-blur-xl rounded-lg border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden animate-powerMenuOpen">
+              <button
+                className="w-full flex items-center gap-3 px-4 py-3 text-left text-white/90 text-sm hover:bg-white/[0.08] transition-colors border-b border-white/[0.06]"
+                onClick={() => handlePowerAction('sleep')}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-white/70">
+                  <path d="M9.27 4.49c-1.63 7.54 3.75 12.41 7.66 13.8C15.54 19.38 13.81 20 12 20c-4.41 0-8-3.59-8-8 0-3.45 2.2-6.4 5.27-7.51m2.72-2.48C5.75 2.01 1 6.76 1 12.5c0 5.52 4.48 10 10 10 4.34 0 8.04-2.77 9.42-6.63.53-1.49-.68-2.94-2.24-2.67-.34.06-.68.1-1.02.1-3.9 0-7.35-3.02-7.59-7.07-.05-.82.46-1.57 1.24-1.83.25-.08.5-.11.74-.12z"/>
+                </svg>
+                Sleep
+              </button>
+              <button
+                className="w-full flex items-center gap-3 px-4 py-3 text-left text-white/90 text-sm hover:bg-white/[0.08] transition-colors border-b border-white/[0.06]"
+                onClick={() => handlePowerAction('restart')}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-white/70">
+                  <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+                Restart
+              </button>
+              <button
+                className="w-full flex items-center gap-3 px-4 py-3 text-left text-white/90 text-sm hover:bg-white/[0.08] transition-colors"
+                onClick={() => handlePowerAction('shutdown')}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-white/70">
+                  <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
+                </svg>
+                Shut down
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <style>{`
@@ -189,6 +237,19 @@ const StartMenu = ({ isOpen, onClose, onOpenApp, apps }) => {
         }
         .animate-startMenuOpen {
           animation: startMenuOpen 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes powerMenuOpen {
+          from {
+            opacity: 0;
+            transform: translateY(8px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        .animate-powerMenuOpen {
+          animation: powerMenuOpen 0.15s cubic-bezier(0.16, 1, 0.3, 1);
         }
       `}</style>
     </div>

@@ -23,12 +23,18 @@ const DesktopIcon = ({ icon, onDoubleClick, index }) => {
       onClick={handleClick}
       onDoubleClick={onDoubleClick}
     >
-      <img 
-        src={icon.icon} 
-        alt={icon.title} 
-        className="w-11 h-11 mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-        draggable={false} 
-      />
+      {icon.isEmoji ? (
+        <span className="text-[44px] mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
+          {icon.icon}
+        </span>
+      ) : (
+        <img 
+          src={icon.icon} 
+          alt={icon.title} 
+          className="w-11 h-11 mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+          draggable={false} 
+        />
+      )}
       <span className="text-white text-[11px] text-center leading-tight px-1 py-0.5 rounded-sm max-w-[72px] break-words"
         style={{ 
           textShadow: '0 1px 2px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.5)',

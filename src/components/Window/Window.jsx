@@ -27,11 +27,13 @@ const Window = ({
   onFocus,
   onPositionChange,
   onSizeChange,
+  onSnap,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [snapPreview, setSnapPreview] = useState(null); // 'left', 'right', 'top', null
 
   const ContentComponent = contentComponents[windowData.component];
 
@@ -58,13 +60,29 @@ const Window = ({
     });
   };
 
+  // Detect snap zones
+  const getSnapZone = (x, y) => {
+    const threshold = 20;
+    const screenWidth = window.innerWidth;
+    const taskbarHeight = 48;
+    
+    if (y <= threshold) return 'top'; // Maximize
+    if (x <= threshold) return 'left'; // Left half
+    if (x >= screenWidth - threshold) return 'right'; // Right half
+    return null;
+  };
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (isDragging && !windowData.maximized) {
-        onPositionChange({
-          x: e.clientX - dragOffset.x,
-          y: Math.max(0, e.clientY - dragOffset.y),
-        });
+        const newX = e.clientX - dragOffset.x;
+        const newY = Math.max(0, e.clientY - dragOffset.y);
+        
+        onPositionChange({ x: newX, y: newY });
+        
+        // Show snap preview
+        const zone = getSnapZone(e.clientX, e.clientY);
+        setSnapPreview(zone);
       }
       if (isResizing && !windowData.maximized) {
         const newWidth = Math.max(400, resizeStart.width + (e.clientX - resizeStart.x));
@@ -73,9 +91,13 @@ const Window = ({
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e) => {
+      if (isDragging && snapPreview && onSnap) {
+        onSnap(snapPreview);
+      }
       setIsDragging(false);
       setIsResizing(false);
+      setSnapPreview(null);
     };
 
     if (isDragging || isResizing) {
@@ -87,11 +109,38 @@ const Window = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, isResizing, dragOffset, resizeStart, windowData.maximized, onPositionChange, onSizeChange]);
+  }, [isDragging, isResizing, dragOffset, resizeStart, windowData.maximized, onPositionChange, onSizeChange, snapPreview, onSnap]);
 
   if (windowData.minimized) return null;
 
-  const windowStyle = windowData.maximized
+  // Handle snap positions
+  const getSnapStyle = () => {
+    if (windowData.snapPosition === 'left') {
+      return {
+        top: 0,
+        left: 0,
+        width: '50vw',
+        height: 'calc(100vh - 48px)',
+        zIndex: zIndex + 10,
+        borderRadius: 0,
+      };
+    }
+    if (windowData.snapPosition === 'right') {
+      return {
+        top: 0,
+        left: '50vw',
+        width: '50vw',
+        height: 'calc(100vh - 48px)',
+        zIndex: zIndex + 10,
+        borderRadius: 0,
+      };
+    }
+    return null;
+  };
+
+  const snapStyle = getSnapStyle();
+
+  const windowStyle = snapStyle || (windowData.maximized
     ? {
         top: 0,
         left: 0,
@@ -106,18 +155,35 @@ const Window = ({
         width: windowData.size.width,
         height: windowData.size.height,
         zIndex: zIndex + 10,
-      };
+      });
+
+  // Snap preview overlay position
+  const getSnapPreviewStyle = () => {
+    if (!snapPreview) return null;
+    if (snapPreview === 'left') return { left: 0, top: 0, width: '50%', height: 'calc(100vh - 48px)' };
+    if (snapPreview === 'right') return { right: 0, top: 0, width: '50%', height: 'calc(100vh - 48px)' };
+    if (snapPreview === 'top') return { left: 0, top: 0, width: '100%', height: 'calc(100vh - 48px)' };
+    return null;
+  };
 
   return (
-    <div
-      className={`absolute flex flex-col overflow-hidden bg-[rgba(32,32,32,0.9)] backdrop-blur-2xl border rounded-xl transition-all duration-200 animate-windowOpen ${
-        isActive 
-          ? 'shadow-[0_8px_32px_rgba(0,0,0,0.5)] border-white/[0.08]' 
-          : 'shadow-[0_4px_16px_rgba(0,0,0,0.3)] border-white/[0.05] opacity-95'
-      } ${windowData.maximized ? '!rounded-none' : ''}`}
-      style={windowStyle}
-      onClick={onFocus}
-    >
+    <>
+      {/* Snap Preview Overlay */}
+      {snapPreview && (
+        <div
+          className="fixed bg-white/10 border-2 border-white/30 rounded-lg pointer-events-none z-[9998] transition-all duration-150"
+          style={getSnapPreviewStyle()}
+        />
+      )}
+      <div
+        className={`absolute flex flex-col overflow-hidden bg-[rgba(32,32,32,0.9)] backdrop-blur-2xl border rounded-xl transition-all duration-200 animate-windowOpen ${
+          isActive 
+            ? 'shadow-[0_8px_32px_rgba(0,0,0,0.5)] border-white/[0.08]' 
+            : 'shadow-[0_4px_16px_rgba(0,0,0,0.3)] border-white/[0.05] opacity-95'
+        } ${(windowData.maximized || snapStyle) ? '!rounded-none' : ''}`}
+        style={windowStyle}
+        onMouseDown={onFocus}
+      >
       {/* Mica-like top gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent pointer-events-none h-32" />
       
@@ -127,7 +193,11 @@ const Window = ({
         onMouseDown={handleMouseDown}
       >
         <div className="flex items-center gap-2.5 text-white/90 text-[13px]">
-          <img src={windowData.icon} alt="" className="w-4 h-4" />
+          {windowData.isEmoji ? (
+            <span className="text-base">{windowData.icon}</span>
+          ) : (
+            <img src={windowData.icon} alt="" className="w-4 h-4" />
+          )}
           <span className="font-medium">{windowData.title}</span>
         </div>
         
@@ -160,12 +230,12 @@ const Window = ({
       </div>
       
       {/* Content */}
-      <div className="flex-1 overflow-auto p-5 text-white relative z-10">
+      <div className="flex-1 overflow-auto p-5 text-white relative z-10" onMouseDown={(e) => e.stopPropagation()}>
         {ContentComponent && <ContentComponent />}
       </div>
 
       {/* Resize Handle */}
-      {!windowData.maximized && (
+      {!windowData.maximized && !snapStyle && (
         <div 
           className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize"
           onMouseDown={handleResizeMouseDown} 
@@ -189,6 +259,7 @@ const Window = ({
         }
       `}</style>
     </div>
+    </>
   );
 };
 
