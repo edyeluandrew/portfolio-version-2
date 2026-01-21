@@ -8,11 +8,7 @@ import {
   X,
   Users,
   CreditCard,
-  Calendar,
-  BookOpen,
-  BarChart3,
-  ShoppingCart,
-  ClipboardList
+  BarChart3
 } from 'lucide-react';
 
 const projects = [
@@ -20,7 +16,7 @@ const projects = [
     id: 1,
     title: "Clevers Origin School System",
     description: "A comprehensive school management web system for Clevers Origin. Features student enrollment, attendance tracking, grade management, class scheduling, teacher portals, parent dashboards, and report generation. Payment integration coming soon.",
-    image: "/projects/clevers-origin.png",
+    image: "/projects/school.jpg",
     icon: <GraduationCap className="w-12 h-12 text-[#60cdff]" />,
     tags: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Tailwind CSS', 'REST API'],
     features: ['Student Management', 'Attendance Tracking', 'Grade Reports', 'Class Scheduling', 'Teacher Portal', 'Parent Dashboard'],
@@ -36,7 +32,7 @@ const projects = [
     icon: <FlaskConical className="w-12 h-12 text-[#60cdff]" />,
     tags: ['React', 'Tailwind CSS', 'Vite'],
     features: ['Responsive Design', 'Team Showcase', 'Research Portfolio', 'Contact Forms', 'Animations'],
-    link: '#',
+    link: 'https://www.beta-techlabs.com/',
     github: 'https://github.com/edyeluandrew/beta-tech-labs',
     status: 'Live',
   },
@@ -48,9 +44,45 @@ const projects = [
     icon: <UtensilsCrossed className="w-12 h-12 text-[#60cdff]" />,
     tags: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Tailwind CSS', 'REST API'],
     features: ['Order Management', 'Table Bookings', 'Menu Management', 'Kitchen Display', 'Customer Queue', 'Sales Reports'],
-    link: '#',
+    link: 'https://numba-hotel.vercel.app/',
     github: 'https://github.com/edyeluandrew/numba-restaurant',
     status: 'In Production',
+  },
+  {
+    id: 4,
+    title: "Orrbit Platform",
+    description: "A comprehensive business management platform featuring task tracking, analytics dashboards, team collaboration tools, and project management capabilities. Built for modern teams to streamline workflows.",
+    image: "/projects/orbit.jpg",
+    icon: <BarChart3 className="w-12 h-12 text-[#60cdff]" />,
+    tags: ['React', 'Next.js', 'Tailwind CSS', 'Vercel'],
+    features: ['Task Management', 'Analytics Dashboard', 'Team Collaboration', 'Real-time Updates', 'Project Tracking', 'Reports'],
+    link: 'https://orrbit-sand.vercel.app',
+    github: 'https://github.com/edyeluandrew/Orrbit.git',
+    status: 'Live',
+  },
+  {
+    id: 5,
+    title: "IndabaX Voting System",
+    description: "A secure online voting platform for IndabaX events. Features real-time vote counting, voter authentication, multiple ballot support, results visualization, and comprehensive admin controls.",
+    image: "/projects/vote.jpg",
+    icon: <Users className="w-12 h-12 text-[#60cdff]" />,
+    tags: ['React', 'Firebase', 'Tailwind CSS', 'Authentication'],
+    features: ['Secure Voting', 'Real-time Results', 'Voter Authentication', 'Multiple Ballots', 'Admin Dashboard', 'Results Analytics'],
+    link: 'https://indabaxvoting.web.app',
+    github: 'https://github.com/edyeluandrew/indabax-voting.git',
+    status: 'Live',
+  },
+  {
+    id: 6,
+    title: "Numba Hotel Management",
+    description: "A complete hotel management system for Numba Hotel. Manages room bookings, guest check-ins/outs, housekeeping schedules, billing, and provides insights through analytics for better hotel operations.",
+    image: "/projects/numba-restaurant.png",
+    icon: <CreditCard className="w-12 h-12 text-[#60cdff]" />,
+    tags: ['React', 'Node.js', 'PostgreSQL', 'Tailwind CSS', 'REST API'],
+    features: ['Room Booking', 'Guest Management', 'Housekeeping', 'Billing System', 'Reports', 'Occupancy Tracking'],
+    link: 'https://numba-hotel.vercel.app/',
+    github: 'https://github.com/edyeluandrew/numba.git',
+    status: 'Live',
   },
 ];
 
@@ -118,17 +150,30 @@ const ProjectsContent = () => {
 
                 {/* Quick Actions */}
                 <div className="flex gap-3">
-                  <a 
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 text-white/80 text-sm rounded-lg hover:bg-white/10 transition-colors"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Github className="w-4 h-4" /> View Code
-                  </a>
-                  <button className="flex items-center gap-1.5 px-3 py-1.5 bg-[#60cdff]/20 text-[#60cdff] text-sm rounded-lg hover:bg-[#60cdff]/30 transition-colors">
-                    <ExternalLink className="w-4 h-4" /> Details
+                  {project.github !== '#' && (
+                    <a 
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 text-white/80 text-sm rounded-lg hover:bg-white/10 transition-colors"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Github className="w-4 h-4" /> View Code
+                    </a>
+                  )}
+                  {project.link !== '#' && (
+                    <a 
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-[#60cdff] text-black text-sm rounded-lg hover:bg-[#60cdff]/90 transition-colors font-medium"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ExternalLink className="w-4 h-4" /> Visit Site
+                    </a>
+                  )}
+                  <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 text-white/80 text-sm rounded-lg hover:bg-white/10 transition-colors">
+                    View Details
                   </button>
                 </div>
               </div>
@@ -200,14 +245,16 @@ const ProjectsContent = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3">
-                <a 
-                  href={selectedProject.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 py-3 bg-white/10 text-white font-medium rounded-lg text-center hover:bg-white/20 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Github className="w-5 h-5" /> View on GitHub
-                </a>
+                {selectedProject.github !== '#' && (
+                  <a 
+                    href={selectedProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-3 bg-white/10 text-white font-medium rounded-lg text-center hover:bg-white/20 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Github className="w-5 h-5" /> View on GitHub
+                  </a>
+                )}
                 {selectedProject.link !== '#' && (
                   <a 
                     href={selectedProject.link}
